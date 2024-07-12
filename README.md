@@ -1,4 +1,4 @@
-# moto
+![Screenshot_home](https://github.com/user-attachments/assets/c36e1e37-503c-43ff-973e-c0927a9e857a)# moto
 
 Motoは、保護猫の取引を管理するためのWebアプリケーションです。このアプリケーションでは、保護猫の画層を位置情報とともにアップロードすることができ、猫のリストを表示したり、猫にいいねをつけたり、取引を完了することができます。このアプリを通して野良猫や行き場のない猫を助けたいです！
 
@@ -15,9 +15,24 @@ Motoは、保護猫の取引を管理するためのWebアプリケーション�
 - メッセージ機能
 - いいねしたアイテム・取引したアイテム・マイアイテムの一覧表示
 
+
+### スクリーンショット
+![Motoのホームページ](images/Screenshot_home.png)
+![サインアップ](images/Screenshot_singup.png)
+![ログイン](images/Screenshot_login.png)
+![アイテム追加](images/Screenshot_add.png)
+![アイテム詳細](images/Screenshot_item_detail.png)
+![アイテム関連](images/Screenshot_related.png)
+![アイテム検索](images/Screenshot_item_search.png)
+![メッセージ](images/Screenshot_message.png)
+![メッセージ詳細](images/Screenshot_message_detail.png)
+![取引確認](images/Screenshot_trade_check.png)
+![ダッシュボード](images/Screenshot_dashboard_detail.png)
+
 ## インストール
 
 このプロジェクトをローカル環境にセットアップする手順は以下の通りです。
+
 
 ### 前提条件
 
@@ -30,12 +45,16 @@ Motoは、保護猫の取引を管理するためのWebアプリケーション�
 まず、リポジトリをクローンします。
 
 git clone https://github.com/kikitetomoro/moto.git
+
 cd moto
 
 ###  仮想環境の作成とアクティベート
 
 python -m venv venv
-source venv/bin/activate # Windowsの場合: venv\Scripts\activate
+
+source venv/bin/activate 
+
+# Windowsの場合: venv\Scripts\activate
 
 ###   依存関係のインストール
 
@@ -45,6 +64,7 @@ pip install -r requirements.txt
 ###   データベースのマイグレーション
 
 python manage.py makemigrations
+
 python manage.py migrate
 
 ###   サーバーの起動
