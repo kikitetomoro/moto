@@ -1,0 +1,146 @@
+
+{% extends 'core/base.html' %}
+
+{% block title %}{{ item.name }}{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p>{{ user.username }} でログイン中</p>
+{% else %}
+<p>ログインしていません</p>
+{% endif %}
+
+<div class="grid sm:grid-cols-5 sm:gap-6">
+    <div class="sm:col-span-2 col-span-2">
+        <img src="{{ item.image.url }}" class="rounded-xl w-full">
+    </div>
+  
+    <div class="col-span-3 p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl">{{ item.name }}</h1>
+        <p class="text-gray-500"><strong>投稿者: </strong>{{ item.created_by.username }}</p>
+    
+        {% if item.description %}
+            <p class="text-gray-700">
+                <strong class="text-gray-500">詳細:</strong><br>
+                {{ item.description }}
+            </p>
+        {% endif %}
+        {% if item.prefecture %}
+        <p class="text-gray-700">
+            <strong class="text-gray-500">都道府県:</strong><br>
+            {{ item.prefecture }}
+        </p>
+        {% endif %}
+        {% if item.address %}
+            <p class="text-gray-700">
+                <strong class="text-gray-500">住所:</strong><br>
+                {{ item.address }}
+            </p>
+        {% endif %}
+  
+        {% if request.user == item.created_by %}
+            <div class="mt-6 p-6 bg-white rounded-xl">
+                <p class="mb-4">これはあなたのアイテムです</p>
+  
+                <a href="{% url 'item:edit' item.id %}" class="inline-block mr-2 border border-teal-500 hover:bg-teal-700 text-teal-500 font-semibold hover:border-transparent hover:bg-teal-500 hover:text-white py-2 px-6 rounded-full">編集</a>
+                <a href="{% url 'item:delete' item.id %}" class="inline-block bg-rose-400 hover:bg-rose-500 text-white font-bold py-2 px-6 rounded-full">消す</a>
+            </div>
+        {% else %}  
+        <div class="text-center sm:text-left">
+            <a href="{% url 'conversation:new' item.id %}" class="inline-block mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">投稿者に問い合わせ</a>
+        </div>
+           
+        {% endif %}
+    
+    {% if user.is_authenticated %}
+    <form action="{% url 'item:like_item' item.pk %}" method="POST">
+        {% csrf_token %}
+        {% if user in item.likes.all %}
+        <button type="submit" name="item_id" value="{{item.id}}" class="text-red-500 p-2 rounded-full focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.172 8.828c-1.562 1.562-1.562 4.094 0 5.656L12 23.312l8.828-8.828c1.562-1.562 1.562-4.094 0-5.656C18.266 7.266 15.734 7.266 14.172 8.828L12 11l-2.172-2.172c-1.562-1.562-4.094-1.562-5.656 0z" />
+          </svg>
+      </button>
+      
+        {% else %}
+        <button type="submit"name="item_id" value="{{item.id}}" class="text-white p-2 rounded-full focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke="red" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.172 8.828c-1.562 1.562-1.562 4.094 0 5.656L12 23.312l8.828-8.828c1.562-1.562 1.562-4.094 0-5.656C18.266 7.266 15.734 7.266 14.172 8.828L12 11l-2.172-2.172c-1.562-1.562-4.094-1.562-5.656 0z" />
+          </svg>
+        </button>
+        {% endif %}
+    </form>
+    {% else %}
+    <a class="mt-2 inline-block underline underline-offset-2 decoration-blue-500" href="{% url 'core:signup' %}"><span class="text-blue-500">ログインしていいね</span></a>
+    {% endif %}
+    <p>{{ item.total_likes }} いいね</p>
+    {% if user.is_authenticated %}
+        <form id="renew-location-form" method="post">
+            {% csrf_token %}
+            <button type="button" id="renew-location-btn" class="inline-block mt-6 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded">現在地に更新</button>
+        </form>
+    {% endif%}
+
+        <script>
+            document.getElementById('renew-location-btn').addEventListener('click', function() {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                  var latitude = position.coords.latitude;
+                  var longitude = position.coords.longitude;
+        
+                  var formData = new FormData();
+                  formData.append('latitude', latitude);
+                  formData.append('longitude', longitude);
+                  formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        
+                  fetch("{% url 'item:renew_location' item.id %}", {
+                    method: 'POST',
+                    body: formData,
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.status === 'success') {
+                      alert('位置情報が更新されました');
+
+                    } else {
+                      alert('エラーが発生しました: ' + data.message);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('エラー:', error);
+                    alert('エラーが発生しました');
+                  });
+                }, function(error) {
+                  console.error('Geolocation エラー:', error);
+                  alert('位置情報の取得に失敗しました');
+                });
+              } else {
+                alert('Geolocationがサポートされていません');
+              }
+            });
+          </script>
+    </div>
+</div>
+  
+  <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">関連</h2>
+  
+    <div class="grid sm:grid-cols-3 grid-cols-1 sm:gap-3">
+        {% for item in related_items %}
+            <div>
+                <a href="{% url 'item:detail' item.id %}">
+                    <div>
+                        <img src="{{ item.image.url }}" class="rounded-t-xl w-full h-64 object-cover">
+                    </div>
+  
+                    <div class="p-6 bg-white rounded-b-xl">
+                        <h2 class="text-2xl">{{ item.name }}</h2>
+                        <p class="text-gray-500">提供者: {{ item.created_by }}</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+

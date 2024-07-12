@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}| 猫ヘル</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body>
+  <header class="sticky top-0 bg-white">
+    <nav class="py-3 px-3  border-b border-gray-200">
+      <a href="{% url 'core:index' %}" class="lg:-m-1.5 lg:p-1.5">
+        <img class="h-12 w-auto mx-auto mb-0 lg:mb-2" src="/media/moto1.svg" alt="">
+      </a>
+      <div class="space-x-6  flex-wrap text-center sm:items-center ">
+        <a class="text-neutral-600 whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" href="{% url 'core:index' %}">ホーム</a>
+        {% if user.userstatus == "corporate" %}
+        <a class="text-neutral-600 whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" href="{% url 'item:new' %}">保護猫を追加</a>
+        <div class="relative inline-block">
+          <button class="flex text-neutral-600 fustify-center text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" 
+            type="button" id="dropdownMenuButton2" data-twe-dropdown-toggle-ref aria-expanded="false">
+            野良を探す
+            <span class="ms-2 w-2 [&>svg]:h-5 [&>svg]:w-5">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </span>
+          </button>
+          <ul class="absolute z-10 hidden min-w-max list-none overflow-hidden rounded-lg bg-gray-800 text-base shadow-lg dark:bg-surface-dark" aria-labelledby="dropdownMenuButton2">
+            <li>
+              <a class="whitespace-nowrap block w-full whitespace-nowrap bg-gray-800 px-4 py-2 text-sm font-normal text-white hover:bg-gray-700 focus:bg-gray-700 focus:outline-none active:bg-gray-700 active:no-underline dark:bg-surface-dark dark:text-white dark:hover:bg-neutral-800/25 dark:focus:bg-neutral-800/25 dark:active:bg-neutral-800/25" href="{% url 'item:items' %}">カテゴリ別で探す</a>
+            </li>
+            <li>
+              <a class="whitespace-nowrap block w-full whitespace-nowrap bg-gray-800 px-4 py-2 text-sm font-normal text-white hover:bg-gray-700 focus:bg-gray-700 focus:outline-none active:bg-gray-700 active:no-underline dark:bg-surface-dark dark:text-white dark:hover:bg-neutral-800/25 dark:focus:bg-neutral-800/25 dark:active:bg-neutral-800/25" href="{% url 'item:map_view' %}">マップから探す</a>
+            </li>
+          </ul>
+        </div>
+        {% else %}
+          <a class="whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400 text-neutral-600" href="{% url 'item:new' %}">野良を追加</a>
+          <div class="relative inline-block">
+            <button class=" flex fustify-center  text-neutral-600 text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400"
+              type="button" id="dropdownMenuButton2" data-twe-dropdown-toggle-ref aria-expanded="false">
+              保護猫を探す
+              <span class="ms-2 w-2 [&>svg]:h-5 [&>svg]:w-5">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </span>
+            </button>
+            <ul class="absolute z-10 hidden min-w-max list-none overflow-hidden rounded-lg bg-gray-800 text-base shadow-lg dark:bg-surface-dark" aria-labelledby="dropdownMenuButton2">
+              <li>
+                <a class="whitespace-nowrap block w-full whitespace-nowrap bg-gray-800 px-4 py-2 text-sm font-normal text-white hover:bg-gray-700 focus:bg-gray-700 focus:outline-none active:bg-gray-700 active:no-underline dark:bg-surface-dark dark:text-white dark:hover:bg-neutral-800/25 dark:focus:bg-neutral-800/25 dark:active:bg-neutral-800/25" href="{% url 'item:items' %}">カテゴリ別で探す</a>
+              </li>
+              <li>
+                <a class="whitespace-nowrap block w-full whitespace-nowrap bg-gray-800 px-4 py-2 text-sm font-normal text-white hover:bg-gray-700 focus:bg-gray-700 focus:outline-none active:bg-gray-700 active:no-underline dark:bg-surface-dark dark:text-white dark:hover:bg-neutral-800/25 dark:focus:bg-neutral-800/25 dark:active:bg-neutral-800/25" href="{% url 'item:map_view' %}">マップから探す</a>
+              </li>
+            </ul>
+          </div>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+          <a class="text-neutral-600 whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" href="{% url 'conversation:inbox' %}">メッセージ</a>
+          <a class="text-neutral-600 whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" href="{% url 'dashboard:index' %}">ダッシュボード</a>
+        {% else %}
+          <a class="text-neutral-600 whitespace-nowrap text-sm lg:text-lg font-semibold hover:text-rose-400" href="{% url 'core:login'%}">ログイン</a>
+          <a class="whitespace-nowrap bg-transparent hover:bg-rose-500 text-rose-400 font-semibold hover:text-white py-2 px-4 border border-rose-500 hover:border-transparent rounded" href="{% url 'core:signup'%}">サインアップ</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+      <div class="px-6 py-6">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+<footer>
+  <p class="text-center text-neutral-500">Copyright @ 2024 moroteto | All Rights Reserved</p>
+</footer>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var dropdownToggles = document.querySelectorAll('[data-twe-dropdown-toggle-ref]');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function() {
+        var menu = toggle.nextElementSibling;
+        if (menu) {
+          menu.classList.toggle('hidden');
+        }
+      });
+    });
+  });
+</script>
+</html>

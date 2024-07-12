@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+{% block title %}welecom{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<p>{{ user.username }} でログイン中</p>
+{% else %}
+<p>ログインしていません</p>
+{% endif %}
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">新着</h2>
+  
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-3">
+        {% for item in items %}
+            <div>
+                <a href="{% url 'item:detail' item.id %}">
+                    <div>
+                        <img src="{{ item.image.url }}" class="w-full h-64 object-cover rounded-t-xl">
+                    </div>
+  
+                    <div class="p-6 bg-white rounded-b-xl">
+                        <h2 class="text-2xl">{{ item.name }}</h2>
+                        <p class="text-gray-500">提供者: {{ item.created_by }}</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+  </div>
+    
+
+  <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">カテゴリー別</h2>
+  
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
+        {% for category in categories %}
+            <div>
+                <a href="{% url 'item:category_items' category.id %}">
+                    <div class="p-6 bg-rose-300 rounded-xl hover:bg-rose-400">
+                        <h2 class="text-3xl text-white text-semibold text-center">{{ category.name }}</h2>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Items{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p>{{ user.username }} でログイン中</p>
+{% else %}
+<p>ログインしていません</p>
+{% endif %}
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">カテゴリー別</h2>
+  
+    <div class="grid sm:grid-cols-3 gap-3 grid-cols-1">
+        {% for category in categories %}
+            <div>
+                <a href="{% url 'item:category_items' category.id %}">
+                    <div class="p-6 bg-rose-300 rounded-xl hover:bg-rose-400">
+                        <h2 class="text-2xl text-white text-bold text-center">{{ category.name }}</h2>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+  </div>
+
+<div class="flex justify-center my-10 ">
+    <div class="items-center lg:w-1/2 w-5/6">
+        <form class='flex max-w-md mx-auto' method="get" action="{% url 'item:items' %}">
+            <input name="query" class="w-full py-4 px-6 border rounded-full" type="text" value="{{ query }}" placeholder="フリーキーワード">
+            <button id="search-var" class="w-12 h-12 bg-teal-500 text-white rounded-full hover:bg-teal-600 ml-4 flex items-center justify-center" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </button>
+        </form>
+        <div class="w-full">
+            <hr class="my-6">
+            <p class="font-semibold">カテゴリー</p>
+            <ul>
+                {% for category in categories %}
+                    <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
+                        <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
+    
+                    </li>
+                {% endfor %}
+            </ul>
+            <hr class="my-6">
+            <ul>
+                <li><a href="{% url 'item:items' %}" class="mt-6 text-mx text-white font-bold py-2 px-4 rounded-full bg-rose-400 hover:bg-rose-500">条件をクリア</a>
+        </div>
+    </div>
+    
+</div>
+
+
+  
+  <div class="pb-6 grid grid-cols-3  gap-3 bg-gray-100">  
+    <div class="col-span-3 mt-6">
+        <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3">
+            {% for item in items %}
+                <div>
+                    <a href="{% url 'item:detail' item.id %}">
+                        <div>
+                            <img src="{{ item.image.url }}" class="rounded-t-xl w-full h-64 object-cover">
+                        </div>
+  
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">{{ item.name }}</h2>
+                            <p class="text-gray-500">提供者: {{ item.created_by }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+

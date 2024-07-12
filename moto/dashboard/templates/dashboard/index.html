@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p>{{ user.username }} でログイン中</p>
+{% else %}
+<p>ログインしていません</p>
+{% endif %}
+
+<div class="flex justify-center items-center">
+    <a class=" my-6 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" href="{% url 'core:logout_check' %}">ログアウト</a>
+</div>
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">マイ猫</h2>
+    {% if items %}
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-3">
+        {% for item in items %}
+            <div>
+                <a href="{% url 'item:detail' item.id %}">
+                    <div>
+                        <img src="{{ item.image.url }}" class="rounded-t-xl w-full h-64 object-cover">
+                    </div>
+  
+                    <div class="p-6 bg-white rounded-b-xl">
+                        <h2 class="text-2xl">{{ item.name }}</h2>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">追加したアイテムはありません。</p>
+    {% endif %}
+  </div>
+  <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">いいねしたアイテム</h2>
+  
+    {% if like_items %}
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-3">
+            {% for like_item in like_items %}
+                <div>
+                    <a href="{% url 'item:detail' like_item.id %}">
+                        <div>
+                            <img src="{{ like_item.image.url }}" class="rounded-t-xl w-full h-64 object-cover">
+                        </div>
+    
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">{{ like_item.name }}</h2>
+                            <p class="text-gray-500">提供者: {{ like_item.created_by }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">いいねしたアイテムはありません。</p>
+    {% endif %}
+  </div>
+  <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">取引したアイテム</h2>
+  
+    {% if sold_items %}
+    <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-3">
+            {% for sold_item in sold_items %}
+                <div>
+                    <a href="{% url 'item:detail' sold_item.id %}">
+                        <div>
+                            <img src="{{ sold_item.image.url }}" class="rounded-t-xl w-full h-64 object-cover">
+                        </div>
+    
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">{{ sold_item.name }}</h2>
+                            <p class="text-gray-500">提供者: {{ sold_item.created_by }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">取引したアイテムはありません。</p>
+    {% endif %}
+  </div>
+{% endblock %}
+
+

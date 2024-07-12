@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p>{{ user.username }} でログイン中</p>
+{% else %}
+<p>ログインしていません</p>
+{% endif %}
+
+<h1 class="my-6 text-3xl">メッセージ</h1>
+
+{% if conversations %}
+<div class="space-y-6">
+    {% for conversation in conversations %}
+        <a href="{% url 'conversation:detail' conversation.id %}">
+            <div class="p-6 flex bg-gray-100 rounded-xl mb-2">
+                <div class="pr-6">
+                    <img src="{{ conversation.item.image.url }}" class="w-20 rounded-xl">
+                </div>
+
+                <div>
+                    {% for member in conversation.members.all %}
+                        {% if member != request.user %}
+                            <p class="mb-4"><strong>{{ member.username }}</strong> | {{ conversation.modified_at }}</p>
+                            <p>{{ conversation.item.name }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+{% else%}
+<div class="p-6 bg-gray-100 rounded-xl mb-2">
+    <p class="text-center">メッセージはありません。</p>
+</div>
+{% endif %}
+{% endblock %}
