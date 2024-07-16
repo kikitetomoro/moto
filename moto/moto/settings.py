@@ -69,6 +69,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, '.env'))
+
 GOOGLE_API_KEY=env('GOOGLE_API_KEY')
 DEBUG=env.bool('DEBUG')
 SECRET_KEY =env('SECRET_KEY')
@@ -79,3 +82,4 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+ALLOWED_HOSTS = ['*']
