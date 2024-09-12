@@ -14,7 +14,7 @@
       <a href="{% url 'core:index' %}" class="lg:-m-1.5 lg:p-1.5">
         <img class="h-12 w-auto mx-auto mb-0 lg:mb-2" src="/media/moto1.svg" alt="">
       </a>
-      <div class="space-x-6  flex-wrap text-center sm:items-center ">
+      <div class="space-x-6  flex-wrap text-center sm:items-center space-y-4">
         <a class="text-neutral-600 whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" href="{% url 'core:index' %}">ホーム</a>
         {% if user.userstatus == "corporate" %}
         <a class="text-neutral-600 whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" href="{% url 'item:new' %}">保護猫を追加</a>
@@ -63,8 +63,8 @@
           <a class="text-neutral-600 whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" href="{% url 'conversation:inbox' %}">メッセージ</a>
           <a class="text-neutral-600 whitespace-nowrap text-sm sm:text-base lg:text-lg font-semibold hover:text-rose-400" href="{% url 'dashboard:index' %}">ダッシュボード</a>
         {% else %}
-          <a class="text-neutral-600 whitespace-nowrap text-sm lg:text-lg font-semibold hover:text-rose-400" href="{% url 'core:login'%}">ログイン</a>
-          <a class="whitespace-nowrap bg-transparent hover:bg-rose-500 text-rose-400 font-semibold hover:text-white py-2 px-4 border border-rose-500 hover:border-transparent rounded" href="{% url 'core:signup'%}">サインアップ</a>
+          <a class="text-neutral-600 whitespace-nowrap text-sm lg:text-lg font-semibold hover:text-rose-400 m" href="{% url 'core:login'%}">ログイン</a>
+          <a class="ms-4 whitespace-nowrap bg-transparent hover:bg-rose-500 text-rose-400 font-semibold hover:text-white py-2 px-4 border border-rose-500 hover:border-transparent rounded" href="{% url 'core:signup'%}">サインアップ</a>
         {% endif %}
       </div>
     </nav>
